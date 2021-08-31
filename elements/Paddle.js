@@ -1,8 +1,8 @@
 //Algumas constantes (Acho legal criar um arquivo só de constantes também)
 //Altura, comprimento e distância da parte de baixo da tela, respectivamente.
-const PADDLE_HEIGHT = "100px";
-const PADDLE_WIDTH = "20px";
-const PADDLE_MARGIN_BOTTOM = "50px";
+const PADDLE_HEIGHT = 100;
+const PADDLE_WIDTH = 20;
+const PADDLE_MARGIN_BOTTOM = 50;
 
 //classe do paddle para organizar melhor.
 class Paddle {
@@ -24,5 +24,6 @@ class Paddle {
         //Comprimento
         this.width = PADDLE_WIDTH;
     }
-
 }
+
+export default Paddle
