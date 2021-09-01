@@ -1,4 +1,4 @@
-import Paddle from './elements/Paddle.js'
+import Paddle from './components/Paddle.js'
 
 //Seleciona a tag "canvas" la do index.html
 const canvas = document.getElementById("breakout");
