@@ -1,7 +1,7 @@
 //Algumas constantes (Acho legal criar um arquivo só de constantes também)
 //Altura, comprimento e distância da parte de baixo da tela, respectivamente.
-const PADDLE_HEIGHT = 100;
-const PADDLE_WIDTH = 20;
+const PADDLE_HEIGHT = 35;
+const PADDLE_WIDTH = 7;
 const PADDLE_MARGIN_BOTTOM = 50;
 
 //classe do paddle para organizar melhor.
@@ -15,8 +15,8 @@ class Paddle {
         //Posição eixo y
         this.y = y;
         
-        //Velocidade, inicialmente zero
-        this.dx = 0;
+        //Velocidade, defini como 2
+        this.dx = 2;
         
         //Altura
         this.height = PADDLE_HEIGHT;
