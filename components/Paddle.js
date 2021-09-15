@@ -1,8 +1,7 @@
 //Algumas constantes (Acho legal criar um arquivo só de constantes também)
 //Altura, comprimento e distância da parte de baixo da tela, respectivamente.
-const PADDLE_HEIGHT = 35;
-const PADDLE_WIDTH = 7;
-const PADDLE_MARGIN_BOTTOM = 50;
+const PADDLE_HEIGHT = 10;
+const PADDLE_WIDTH = 70;
 
 
 //classe do paddle para organizar melhor.
@@ -58,7 +57,7 @@ class Paddle {
 
         context.fillStyle='#fff';
         
-        context.fillRect(this.x, this.y, this.height, this.width);
+        context.fillRect(this.x, this.y, this.width, this.height);
     };
 
 }

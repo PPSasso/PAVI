@@ -1,3 +1,4 @@
+import Ball from './components/Ball.js';
 import Paddle from './components/Paddle.js'
 
 // Variavel da imagem, acredito que o certo é deixar em outro lugar, mas deixei aqui pra testes.
@@ -13,7 +14,8 @@ const context = canvas.getContext('2d');
 //Isso foi mais um teste, depois tem que criar uma pasta só de estilos e colocar isso la, só pra organizar.
 canvas.style.backgroundColor = "#222222"
 
-var paddle = new Paddle(130,130);
+var paddle = new Paddle(500,500);
+var ball = new Ball(paddle.x + 2, paddle.y - 50);
 
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado esteja pressionada, mude o valor da variavel desejada para truwe.
 document.addEventListener("keydown", function(event){
@@ -40,6 +42,7 @@ document.addEventListener("keyup", function(event){
 // Funcao para desejar o paddle, mais pra frente será colocado mais configs aqui dentro para melhorar o paddle
 function draw(){
     paddle.drawPaddle(context);
+    ball.drawBall(context);
 }
 
 
@@ -49,9 +52,16 @@ function loop(){
     // Move o paddle toda hora (sempre que uma tecla esteja ativa)
     paddle.updatePaddle(canvas);
     
+    ball.updateBall(canvas);
+    
     // Coloca o background na tela (serve para limpar a tela e o local do paddle anterior)
     context.drawImage(BG, 0, 0);
     
+    if(ball.collides(paddle)){
+        ball.dy = -ball.dy;
+        
+    }
+
     // Desenha o paddle no local atualizado
     draw();
 
