@@ -16,7 +16,7 @@ class Paddle {
         this.y = y;
 
         //Velocidade, defini como 2
-        this.dx = 4;
+        this.dx = 5;
         
         //Altura
         this.height = PADDLE_HEIGHT;

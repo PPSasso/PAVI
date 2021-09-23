@@ -10,10 +10,10 @@ class Ball {
         this.y = y;
 
         //Velocidade, defini como 2
-        this.dx = 3;
+        this.dx = 4;
         
         //Velocidade, defini como 2
-        this.dy = -3;
+        this.dy = -4;
         
         //Raio da bola
         this.radius = 4

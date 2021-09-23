@@ -1,5 +1,7 @@
 import Ball from './components/Ball.js';
-import Paddle from './components/Paddle.js'
+import Paddle from './components/Paddle.js';
+import Brick from './components/Brick.js';
+import Level from './utilities/Level.js';
 
 // Variavel da imagem, acredito que o certo é deixar em outro lugar, mas deixei aqui pra testes.
 const BG = new Image();
@@ -16,6 +18,7 @@ canvas.style.backgroundColor = "#222222"
 
 var paddle = new Paddle(500,500);
 var ball = new Ball(paddle.x + 2, paddle.y - 50);
+var bricks = levelMaker();
 
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado esteja pressionada, mude o valor da variavel desejada para truwe.
 document.addEventListener("keydown", function(event){
@@ -43,6 +46,10 @@ document.addEventListener("keyup", function(event){
 function draw(){
     paddle.drawPaddle(context);
     ball.drawBall(context);
+    bricks.forEach(brick =>{
+        brick.drawBrick(context);
+    })
+
 }
 
 
@@ -61,12 +68,57 @@ function loop(){
         ball.dy = -ball.dy;
         
     }
+    
+    bricks.forEach(brick =>{
+        if(ball.collides(brick) && brick.render){
+            if(ball.x + 2 < brick.x && ball.dx > 0){
+                ball.dx = -ball.dx;
+                brick.render=false;
+            }
+            else if(ball.x + 6 > brick.x + brick.width && ball.dx < 0){
+                ball.dx = -ball.dx;
+                brick.render=false;
+            }
+            else if(ball.y < brick.y){
+                ball.dy = -ball.dy
+                brick.render=false;
+            }
+            else{
+                ball.dy = -ball.dy
+                brick.render=false;
+            }
+            
+        }
+    })
 
     // Desenha o paddle no local atualizado
     draw();
 
     // inicia a funcao loop novamente 
     requestAnimationFrame(loop);
+
+}
+
+//Isso aqui ta uma bagunça ainda, vou arrumar quando tiver saco kkk -Sasso
+function levelMaker(){
+    const bricks = [];
+
+    for (let index = 0; index < 67; index++) {
+        if(index > 21 && index < 44){
+            let brick = new Brick(index*37-760, 58);
+            bricks.push(brick);            
+        }
+        else if(index > 44){
+            let brick = new Brick(index*37-1600, 76);
+            bricks.push(brick);            
+        }
+        else{
+            let brick = new Brick(index*37+50, 40);
+            bricks.push(brick); 
+        }
+    }
+
+    return bricks;
 }
 
 // Entra no loop
