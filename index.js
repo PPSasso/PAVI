@@ -3,15 +3,15 @@ import Paddle from './components/Paddle.js';
 import Brick from './components/Brick.js';
 import Level from './utilities/Level.js';
 
-// Variavel da imagem, acredito que o certo é deixar em outro lugar, mas deixei aqui pra testes.
-const BG = new Image();
-BG.src = "imagens/bg.png"
-
 //Seleciona a tag "canvas" la do index.html
 const canvas = document.getElementById("breakout");
 
 //Não entendi pq precisa disso, mas ele atribui o contexto do canvas pra 2d.
 const context = canvas.getContext('2d');
+
+// Variavel da imagem, acredito que o certo é deixar em outro lugar, mas deixei aqui pra testes.
+var BG = new Image();
+BG.src = "imagens/background_.jpg";
 
 //Isso foi mais um teste, depois tem que criar uma pasta só de estilos e colocar isso la, só pra organizar.
 canvas.style.backgroundColor = "#222222"
@@ -64,8 +64,19 @@ function loop(){
     // Coloca o background na tela (serve para limpar a tela e o local do paddle anterior)
     context.drawImage(BG, 0, 0);
     
-    if(ball.collides(paddle)){
+    if(ball.collides(paddle) && ball.dy > 0){
+        ball.y = paddle.y - 1;
         ball.dy = -ball.dy;
+        
+        //Se bater do lado esquerdo do paddle e a bola estiver indo pra direita, ela vai pra esquerda
+        if(paddle.x+(paddle.width/2) > ball.x+ball.radius && ball.dx > 0){
+            ball.dx = -ball.dx;
+        }
+
+        //Se bater do lado direito do paddle e a bola estiver indo pra esquerda, ela vai pra direita
+        if(paddle.x+(paddle.width/2) < ball.x+ball.radius && ball.dx < 0){
+            ball.dx = -ball.dx;
+        }
         
     }
     
