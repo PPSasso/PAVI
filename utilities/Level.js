@@ -1,12 +1,12 @@
 class Level {
-    constructor(bricks){
+    constructor(bricks) {
         this.bricks = bricks;
     }
 
-    renderLevel(context){
+    renderLevel(context) {
         this.bricks.forEach(brick => {
             brick.drawBrick(context);
-            
+
         });
 
     }

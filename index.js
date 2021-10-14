@@ -19,6 +19,7 @@ canvas.style.backgroundColor = "#222222"
 var paddle = new Paddle(500,500);
 var ball = new Ball(paddle.x + 2, paddle.y - 50);
 var bricks = levelMaker();
+var player_life = 3;
 
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado esteja pressionada, mude o valor da variavel desejada para truwe.
 document.addEventListener("keydown", function(event){
@@ -64,6 +65,15 @@ function loop(){
     // Coloca o background na tela (serve para limpar a tela e o local do paddle anterior)
     context.drawImage(BG, 0, 0);
     
+    // Caso a bola bata no chao, ela e resetada para a posição inicial
+    if(ball.y + ball.radius > canvas.height){
+        ball.resetBall(canvas, paddle.y);
+        player_life --;
+        if(player_life == 0){
+                end_game();
+        }
+    }
+
     if(ball.collides(paddle) && ball.dy > 0){
         ball.y = paddle.y - 1;
         ball.dy = -ball.dy;
@@ -130,6 +140,12 @@ function levelMaker(){
     }
 
     return bricks;
+}
+
+// Depois era interessante colocar em um lugar separado, ta bem feio assim -- Rodrigo
+function end_game(){
+    // Aqui seria o lugar que sera colocado uma tela de game over, mas deixei windows alert por enquanto
+    window.alert("GAME OVER");
 }
 
 // Entra no loop
