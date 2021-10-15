@@ -14,7 +14,7 @@ var BG = new Image();
 BG.src = "imagens/background_.jpg";
 
 var LIFE_IMAGE = new Image();
-LIFE_IMAGE = "imagens/life.jpg";
+LIFE_IMAGE.src = "imagens/life.png";
 
 //Isso foi mais um teste, depois tem que criar uma pasta só de estilos e colocar isso la, só pra organizar.
 canvas.style.backgroundColor = "#222222"
@@ -43,6 +43,7 @@ document.addEventListener("keyup", function(event){
     } else if (event.keyCode == 39){
         paddle.rightArrow = false;
     }
+    
 });
 
 
@@ -54,17 +55,20 @@ function draw(){
         brick.drawBrick(context);
     })
 
+    // Funcão para desenhar os corações dependendo de quantas vidas o jogador tem
+    draw_player_life(player_life);
+    
+    
+    
+
 }
 
 
 // Função principal do programa. Fica um loop eterno para que as alterações sejam feitas em tempo real
 function loop(){
-    /*
-    if(player_life == 3){
-        context.drawImage(LIFE_IMAGE, canvas.width - 25, 25, 20, 20);
-    }
-    window.alert("teste");
-    */
+    
+    
+    
     // Move o paddle toda hora (sempre que uma tecla esteja ativa)
     paddle.updatePaddle(canvas);
     
@@ -176,3 +180,28 @@ function showDefeat(){
 restart.addEventListener("click", function(){
     location.reload(); 
 })
+
+
+function showGameStats(text, textX, textY, img, imgX, imgY){
+    // draw text
+    context.fillStyle = "#FFF";
+    context.font = "25px Germania One";
+    context.fillText(text, textX, textY);
+    
+    // draw image
+    context.drawImage(img, imgX, imgY, 25, 25);
+}
+
+// Funcão para desenhar os corações dependendo de quantas vidas o jogador tem
+function draw_player_life(player_life){
+    if(player_life == 3){
+        context.drawImage(LIFE_IMAGE, canvas.width-55, 5, 25, 25);
+        context.drawImage(LIFE_IMAGE, canvas.width-85, 5, 25, 25);
+        context.drawImage(LIFE_IMAGE, canvas.width-115, 5, 25, 25);
+    }else if(player_life == 2){
+        context.drawImage(LIFE_IMAGE, canvas.width-55, 5, 25, 25);
+        context.drawImage(LIFE_IMAGE, canvas.width-85, 5, 25, 25);
+    } else if(player_life == 1){
+        context.drawImage(LIFE_IMAGE, canvas.width-55, 5, 25, 25);
+    }
+}
