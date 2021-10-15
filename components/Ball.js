@@ -10,10 +10,10 @@ class Ball {
         this.y = y;
 
         //Velocidade, defini como 2
-        this.dx = 2;
+        this.dx = 6;
         
         //Velocidade, defini como 2
-        this.dy = -2;
+        this.dy = -6;
         
         //Raio da bola
         this.radius = 4
@@ -78,8 +78,8 @@ class Ball {
     resetBall(canvas, paddle_Y){
         this.x = canvas.width/2;
         this.y = paddle_Y - this.radius;
-        this.dy = -3;
-        this.dx = 3;
+        this.dy = -6;
+        this.dx = 6;
     }
 
 }

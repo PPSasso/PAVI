@@ -13,6 +13,9 @@ const context = canvas.getContext('2d');
 var BG = new Image();
 BG.src = "imagens/background_.jpg";
 
+var LIFE_IMAGE = new Image();
+LIFE_IMAGE = "imagens/life.jpg";
+
 //Isso foi mais um teste, depois tem que criar uma pasta só de estilos e colocar isso la, só pra organizar.
 canvas.style.backgroundColor = "#222222"
 
@@ -56,7 +59,12 @@ function draw(){
 
 // Função principal do programa. Fica um loop eterno para que as alterações sejam feitas em tempo real
 function loop(){
-    
+    /*
+    if(player_life == 3){
+        context.drawImage(LIFE_IMAGE, canvas.width - 25, 25, 20, 20);
+    }
+    window.alert("teste");
+    */
     // Move o paddle toda hora (sempre que uma tecla esteja ativa)
     paddle.updatePaddle(canvas);
     
@@ -65,12 +73,15 @@ function loop(){
     // Coloca o background na tela (serve para limpar a tela e o local do paddle anterior)
     context.drawImage(BG, 0, 0);
     
-    // Caso a bola bata no chao, ela e resetada para a posição inicial
+    
+    // Caso a bola bata no chao, ela é resetada para a posição inicial
     if(ball.y + ball.radius > canvas.height){
         ball.resetBall(canvas, paddle.y);
         player_life --;
+
+        // Verifica se o player não tem mais vida
         if(player_life == 0){
-                end_game();
+            showDefeat();
         }
     }
 
@@ -116,7 +127,10 @@ function loop(){
     draw();
 
     // inicia a funcao loop novamente 
-    requestAnimationFrame(loop);
+    if(player_life != 0 ){
+        requestAnimationFrame(loop);
+    }
+    
 
 }
 
@@ -142,11 +156,23 @@ function levelMaker(){
     return bricks;
 }
 
-// Depois era interessante colocar em um lugar separado, ta bem feio assim -- Rodrigo
-function end_game(){
-    // Aqui seria o lugar que sera colocado uma tela de game over, mas deixei windows alert por enquanto
-    window.alert("GAME OVER");
-}
 
 // Entra no loop
 loop();
+
+
+const gameover = document.getElementById("gameover");
+const defeat = document.getElementById("defeat");
+const restart = document.getElementById("restart");
+
+
+// Quando o jogador perde
+function showDefeat(){
+    gameover.style.display = "block";
+    defeat.style.display = "block";
+}
+
+// Quando clica em "Play again", o jogo da o restart
+restart.addEventListener("click", function(){
+    location.reload(); 
+})
