@@ -15,3 +15,15 @@ h1 {
 
 nav {
 }
+
+.texto{
+    text-align: center;
+    font-size: large;
+    margin: 5% 20%;
+}
+
+#listaFooter{
+    display: flex;
+    justify-content: flex-start;
+    font-size: small;
+}
