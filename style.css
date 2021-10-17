@@ -1,0 +1,17 @@
+* {
+  color: white;
+  background-color: black;
+}
+
+h1 {
+  color: aqua;
+  background-color: rgb(16, 16, 122);
+  padding: 20px;
+  font-family: sans-serif;
+  font-size: 50px;
+  margin-top: 0;
+  border: 5px solid yellow;
+}
+
+nav {
+}
