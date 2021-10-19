@@ -26,9 +26,11 @@ canvas.style.backgroundColor = "#222222"
 
 var paddle = new Paddle(500,500);
 var ball = new Ball(paddle.x + 2, paddle.y - 50);
-var bricks = levelMaker();
+var player_level = 1;
+var bricks = levelMaker(player_level);
 var player_life = 3;
 var player_points = 0;
+
 
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado esteja pressionada, mude o valor da variavel desejada para truwe.
 document.addEventListener("keydown", function(event){
@@ -111,6 +113,7 @@ function loop(){
         if(paddle.x+(paddle.width/2) < ball.x+ball.radius && ball.dx < 0){
             ball.dx = -ball.dx;
         }
+
         
     }
     
@@ -140,6 +143,20 @@ function loop(){
     // Desenha o paddle no local atualizado
     draw();
 
+    /* 
+       Verifica se o level já acabou, caso já tenha acabado, aumenta o level (aumenta uma fileira)
+       Aqui tem que colocar mais propriedades de acordo com a ideia do nosso jogo, no caso só coloquei que aumenta uma vida caso o jogador não esteja com vida cheia 
+       e coloquei para ele ganhar 1000 pontos, mas tem que colocar esquema para aumentar velocidade da bola, etc
+    */
+    if(levelIsDone(bricks)){
+        player_level++;
+        console.log(player_level)
+        bricks = levelMaker(player_level);
+        if(player_life != 3)
+            player_life ++;
+        player_points += 1000;    
+    }
+
     // inicia a funcao loop novamente 
     if(player_life != 0 ){
         requestAnimationFrame(loop);
@@ -149,9 +166,11 @@ function loop(){
 }
 
 //Isso aqui ta uma bagunça ainda, vou arrumar quando tiver saco kkk -Sasso
-function levelMaker(){
+function levelMaker(level){
     const bricks = [];
 
+    // ANTES ERA FEITO DESSA FORMA, MUDEI PARA FACILITAR ESQUEMA DE LEVEL E QUANTIDADE DE FILEIRAS -- Rodrigo
+    /*
     for (let index = 0; index < 67; index++) {
         if(index > 21 && index < 44){
             let brick = new Brick(index*37-760, 58);
@@ -165,7 +184,17 @@ function levelMaker(){
             let brick = new Brick(index*37+50, 40);
             bricks.push(brick); 
         }
+    }*/
+
+    
+    // Y significa o Level, entao se o level for 1, tera apenas uma fileira e assim por diante. Cada fileira tera 23 blocos.
+    for (let y = 0; y < level; y++) {
+        for (let x = 0; x < 23; x++) {
+            let brick = new Brick(x*37+ 60, 35 + y*18);
+            bricks.push(brick);   
+        }                
     }
+    
 
     return bricks;
 }
@@ -174,9 +203,13 @@ function levelMaker(){
 // Entra no loop
 loop();
 
-
+// Tela meio escura quando o jogador perde.
 const gameover = document.getElementById("gameover");
+
+// Imagem do game over
 const defeat = document.getElementById("defeat");
+
+// Texto do botão de restart
 const restart = document.getElementById("restart");
 
 
@@ -192,15 +225,6 @@ restart.addEventListener("click", function(){
 })
 
 
-function showGameStats(text, textX, textY, img, imgX, imgY){
-    // draw text
-    context.fillStyle = "#FFF";
-    context.font = "25px Germania One";
-    context.fillText(text, textX, textY);
-    
-    // draw image
-    context.drawImage(img, imgX, imgY, 25, 25);
-}
 
 // Funcão para desenhar os corações dependendo de quantas vidas o jogador tem
 function draw_player_life(player_life){
@@ -216,4 +240,15 @@ function draw_player_life(player_life){
     }
 }
 
+
+// Função para verificar se todos os blocos já foram quebrados, caso já tenham sido, retorna verdadeiro.
+function levelIsDone (bricks){
+    var bool = true
+    bricks.forEach(brick =>{
+        if(brick.render){ 
+            bool = false;                  
+        }
+    })  
+    return bool;
+}
 
