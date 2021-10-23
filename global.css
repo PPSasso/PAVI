@@ -17,9 +17,8 @@ body, html{
     display: none;
 }
 #defeat{
-    left : 300px;
-    width: 1920px;
-    height: 1080px;
+    width: 100%;
+    height: 100%;
     position: absolute;
     display: none;
 }
@@ -31,4 +30,6 @@ body, html{
     cursor: pointer;
     font-size: 1.25em;
     color : #FFF;
+    top: 56%;
+    left: 47%;
 }
