@@ -12,3 +12,11 @@
   
   Uma inspiração para o projeto é a tecnologia e os projetos desenvolvidos pelo Liquid Galaxy, que é um projeto de código aberto criado pela Google em 2008. 
 
+  ## Instalação:
+
+  - Copiar a URL remota do repositório "https://github.com/PPSasso/PAVI.git"
+  - Utilizando a linha de comando, navegar até o diretório onde deseja armazenar o projeto dentro de sua máquina e enviar o comando "git clone https://github.com/PPSasso/PAVI.git"
+  - Com o projeto aberto retornar a linha de comando e digitar "yarn start-dev" para hospedar a porta Localhost:8000.
+  - Dentro de seu navegador, utilizar a rota "http://localhost:8000/screen" para renderizar o jogo ou utilizar a rota "http://localhost:8000/controller" para renderizar o controle.
+  - Agora é só se divertir! :smile:
+
