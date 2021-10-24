@@ -12,11 +12,15 @@
   
   Uma inspiração para o projeto é a tecnologia e os projetos desenvolvidos pelo Liquid Galaxy, que é um projeto de código aberto criado pela Google em 2008. 
 
+  Para acompanhamento do histórico de commits do nipple e implementação do websocket consultar o repositorio: https://github.com/GabrielHammermeister/socket-server.
+
   ## Instalação:
+Para a instalação do projeto serão utilizadas duas tecnologias que devem estar baixadas na sua máquina, Node.js (https://nodejs.org/en/download/), Git(https://git-scm.com/downloads).
 
   - Copiar a URL remota do repositório "https://github.com/PPSasso/PAVI.git"
   - Utilizando a linha de comando, navegar até o diretório onde deseja armazenar o projeto dentro de sua máquina e enviar o comando "git clone https://github.com/PPSasso/PAVI.git"
   - Com o projeto aberto retornar a linha de comando e digitar "npm install" para instalar todas a dependencias do projeto.
+  - Em seguida digitar "npm install yarn --global" para habilitar gerenciador de pacotes yarn.
   - Digitar na linha de comando "yarn start-dev" para hospedar o projeto na porta Localhost:8000.
   - Dentro de seu navegador, utilizar a rota "http://localhost:8000/screen" para renderizar o jogo, ou utilizar a rota "http://localhost:8000/controller" para renderizar o controle.
   - Agora é só se divertir! :smile:
