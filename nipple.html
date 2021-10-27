@@ -10,7 +10,8 @@
 
         #zone_joystick {
             height: 50vh;
-            border: solid rebeccapurple;
+            border: solid rgb(20, 3, 38);
+            background-color: gray;
         }
 
     </style>
@@ -21,20 +22,39 @@
 
 
     <script type="text/javascript" src="./nipplejs.js"></script>
-    
+    <!-- Config nipplejs -->
     <script type="text/javascript">
-    
         var options = { 
-            color: "green",
+            color: "red",
+            restOpacity: 1,
             zone: document.getElementById('zone_joystick'),
+            mode: 'static',
+            position: {left: '50%', top: '25%'},
+            lockX: true
           };
           var manager = nipplejs.create(options);
-          
-          manager.on('move', function(evt, data){
-            console.log(data.position)
-          })
 
+          manager.on('move', function(evt, nipple) {
+
+            console.log(nipple.direction)
+
+            let controllerDir;
+            if(nipple.direction) controllerDir = nipple.direction.angle
+                if(controllerDir) {
+                    socket.send(controllerDir)
+                }
+        })
     </script>
-    
+
+
+    <script src="/socket.io.js"></script>
+    <script>
+        const socket = io("ws://localhost:3000");
+
+        socket.on("connect", () => {
+            console.log("Welcome: " + socket.id);
+        });
+    </script>
+
 </body>
 </html>

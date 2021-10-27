@@ -1,21 +1,10 @@
+
+//Global variables
+var socket = io.connect({ query: "type=controller" });
+
 import Ball from './components/Ball.js';
 import Paddle from './components/Paddle.js';
 import Brick from './components/Brick.js';
-
-
-//Socketserver
-const socketClient = new WebSocket('ws://localhost:4000')
-
-socketClient.onopen = function () {
-    console.log('socket working')
-}
-
-socketClient.onmessage = function(event) {
-    console.log(JSON.parse(event.data));
-
-    // ball.updatePosition(JSON.parse(event.data))
-}
-
 
 //Seleciona a tag "canvas" la do index.html
 const canvas = document.getElementById("breakout");
@@ -45,6 +34,21 @@ var bricks = levelMaker(player_level);
 var player_life = 3;
 var player_points = 0;
 
+
+socket.on("right", data => {
+    console.log("R")
+    paddle.leftArrow = false;
+    paddle.rightArrow = true;
+});
+
+socket.on("left", data => {
+    console.log("L")
+    paddle.rightArrow = false;
+    paddle.leftArrow = true;
+});
+
+
+
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado esteja pressionada, mude o valor da variavel desejada para truwe.
 document.addEventListener("keydown", function(event){
     // keycode 37 = seta da esquerda. Verificar depois uma alternativa para o keycode, pois o mesmo esta deprecated (não é bom deixar)
@@ -55,8 +59,6 @@ document.addEventListener("keydown", function(event){
     else if (event.keyCode == 39){
         paddle.rightArrow = true;
     }
-
-    
 });
 
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado nao esteja pressionada, mude o valor da variavel desejada para false.
@@ -88,14 +90,13 @@ function draw(){
 
 }
 
-
 // Função principal do programa. Fica um loop eterno para que as alterações sejam feitas em tempo real
 async function loop(){
     
     // Move o paddle toda hora (sempre que uma tecla esteja ativa)
-    paddle.updatePaddle(canvas, socketClient);
+    paddle.updatePaddle(canvas);
     
-    await ball.updateBall(canvas, socketClient);
+    ball.updateBall(canvas);
     
     // Coloca o background na tela (serve para limpar a tela e o local do paddle anterior)
     context.drawImage(BG, 0, 0);

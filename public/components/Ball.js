@@ -39,7 +39,6 @@ class Ball {
         }      
         
 
-        await socketClient.send(JSON.stringify({x: this.x, y: this.y}))
 
     };
 
