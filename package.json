@@ -2,10 +2,10 @@
   "name": "socket-server",
   "version": "0.0.0",
   "private": true,
-  "main": "index.ts",
+  "main": "./server.js",
   "scripts": {
     "postinstall": "yarn clean && tsc && yarn copy-files",
-    "start-dev": "nodemon index.ts",
+    "start-dev": "nodemon server.js",
     "clean": "rm -rf ./dist",
     "deploy": "git add . && git commit -m Heroku && git push heroku master",
     "copy-files": "cp -r ./public/ ./dist/"

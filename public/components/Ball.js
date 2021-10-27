@@ -20,9 +20,8 @@ class Ball {
     }
 
     // Funcao para atualizar o paddle, verifica qual variavel esta com valor = true e move o paddle na posicao desejada
-    updateBall(canvas){
+    async updateBall(canvas, socketClient){
         this.x += this.dx;
-
         this.y += this.dy;
 
         if((this.x + this.radius) > canvas.width){
@@ -39,7 +38,17 @@ class Ball {
             this.dy = -this.dy;           
         }      
         
+
+        await socketClient.send(JSON.stringify({x: this.x, y: this.y}))
+
     };
+
+
+    updatePosition(possiton){
+        this.x = parseInt(possiton.x)
+        this.y = parseInt(possiton.y)
+    }
+
 
     //Essa parte é bem complexa, to com preguiça de escrever tudo, me pergunta que eu explico em voz kkk. Assinado: Sasso
     collides(target){

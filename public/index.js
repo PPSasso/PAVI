@@ -2,6 +2,21 @@ import Ball from './components/Ball.js';
 import Paddle from './components/Paddle.js';
 import Brick from './components/Brick.js';
 
+
+//Socketserver
+const socketClient = new WebSocket('ws://localhost:4000')
+
+socketClient.onopen = function () {
+    console.log('socket working')
+}
+
+socketClient.onmessage = function(event) {
+    console.log(JSON.parse(event.data));
+
+    // ball.updatePosition(JSON.parse(event.data))
+}
+
+
 //Seleciona a tag "canvas" la do index.html
 const canvas = document.getElementById("breakout");
 
@@ -29,8 +44,6 @@ var player_level = 1;
 var bricks = levelMaker(player_level);
 var player_life = 3;
 var player_points = 0;
-
-
 
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado esteja pressionada, mude o valor da variavel desejada para truwe.
 document.addEventListener("keydown", function(event){
@@ -72,20 +85,17 @@ function draw(){
     context.fillStyle = "#FFF";
     context.font = "25px Germania One";
     context.fillText(player_points, 80, 25);
-    
 
 }
 
 
 // Função principal do programa. Fica um loop eterno para que as alterações sejam feitas em tempo real
-function loop(){
-    
-    
+async function loop(){
     
     // Move o paddle toda hora (sempre que uma tecla esteja ativa)
-    paddle.updatePaddle(canvas);
+    paddle.updatePaddle(canvas, socketClient);
     
-    ball.updateBall(canvas);
+    await ball.updateBall(canvas, socketClient);
     
     // Coloca o background na tela (serve para limpar a tela e o local do paddle anterior)
     context.drawImage(BG, 0, 0);
@@ -214,7 +224,6 @@ const defeat = document.getElementById("defeat");
 // Texto do botão de restart
 const restart = document.getElementById("restart");
 
-
 // Quando o jogador perde
 function showDefeat(){
     gameover.style.display = "block";
@@ -225,8 +234,6 @@ function showDefeat(){
 restart.addEventListener("click", function(){
     location.reload(); 
 })
-
-
 
 // Funcão para desenhar os corações dependendo de quantas vidas o jogador tem
 function draw_player_life(player_life){
