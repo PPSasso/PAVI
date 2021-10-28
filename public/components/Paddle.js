@@ -49,8 +49,6 @@ class Paddle {
             // socketClient.send(parseInt(this.x))
                         
             this.rightArrow = false
-
-
         }     
         /* Else if para caso a seta da esquerda esteja pressionada, neste caso, tem a condição do eixo x do paddle seja maior que 0, 
         para que não ultrapasse o limite esquerdo da tela.*/
@@ -58,7 +56,6 @@ class Paddle {
             this.x -= this.dx;
             // socketClient.send(parseInt(this.x))
             this.leftArrow = false
-
         }
 
 

@@ -34,15 +34,12 @@
           };
           var manager = nipplejs.create(options);
 
-          manager.on('move', function(evt, nipple) {
-
-            console.log(nipple.direction)
-
-            let controllerDir;
-            if(nipple.direction) controllerDir = nipple.direction.angle
-                if(controllerDir) {
+        manager.on('move', function(evt, nipple) {
+            if(nipple.direction) 
+                var controllerDir = nipple.direction.angle 
+                
+                if(controllerDir) 
                     socket.send(controllerDir)
-                }
         })
     </script>
 

@@ -35,17 +35,24 @@ var player_life = 3;
 var player_points = 0;
 
 
-socket.on("right", data => {
-    console.log("R")
-    paddle.leftArrow = false;
-    paddle.rightArrow = true;
-});
+//socket code 
 
-socket.on("left", data => {
-    console.log("L")
-    paddle.rightArrow = false;
-    paddle.leftArrow = true;
-});
+
+    //Controle de movimentação do player ( R | L )
+    socket.on("right", data => {
+        paddle.rightArrow = true;
+    });
+    socket.on("left", data => {
+        paddle.leftArrow = true;
+    });
+
+
+    //Gerenciamento de entradas de novos players
+
+    socket.on("new player", () => {
+        socket.send("Novo player")
+    })
+
 
 
 
@@ -87,7 +94,6 @@ function draw(){
     context.fillStyle = "#FFF";
     context.font = "25px Germania One";
     context.fillText(player_points, 80, 25);
-
 }
 
 // Função principal do programa. Fica um loop eterno para que as alterações sejam feitas em tempo real
