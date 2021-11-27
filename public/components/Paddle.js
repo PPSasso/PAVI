@@ -61,10 +61,6 @@ class Paddle {
 
     };
 
-
-    
-
-
     setPositionInX(posstion){
         this.x = parseInt(posstion)
     }

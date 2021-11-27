@@ -27,6 +27,9 @@ POINTS.src = "imagens/points.png";
 //Isso foi mais um teste, depois tem que criar uma pasta só de estilos e colocar isso la, só pra organizar.
 canvas.style.backgroundColor = "#222222"
 
+var players = {}
+
+
 var paddle = new Paddle(500,500);
 var ball = new Ball(paddle.x + 2, paddle.y - 50);
 var player_level = 1;
@@ -35,26 +38,84 @@ var player_life = 3;
 var player_points = 0;
 
 
-//socket code 
+function onUpdatePlayers(pls) {
+	var playersFound = {};
 
+    // Insere no array todos os novos sockets que são inexistentes 
+	for (var id in pls) {
+		if (!Object.keys(players).includes(id)) {
+			players[id] = pls[id]
+			createPaddle(players[id])
+		}
+
+		playersFound[id] = true;
+	};
+
+    // Retira do array todos os players que estiverem off
+    for (var id in players) {
+		if (!Object.keys(playersFound).includes(id)) {
+				let index = players.findIndex(paddle => paddle.id == id)
+				players.splice(index, 1)
+				delete players[id];
+            }
+	};
+
+}
+
+socket.on('update-players-object', onUpdatePlayers)
+
+function onCreatePaddle(paddle) {
+	if (screenNumber !== pacman.screen) {
+		paddles.push(new Paddle(paddle.x, paddle.y, paddle.color, paddle.id))
+	}
+}
+
+socket.on('create-paddle', onCreatePaddle)
+
+function updatePlayersInfo(pls) {
+	for (var id in pls) {
+		players[id] = pls[id]
+	}
+}
+
+socket.on('update-players-info', updatePlayersInfo)
+
+function onGameRestart() {
+	
+	//restart variables
+	players = {}
+	for (let i = 1; i <= nScreens; i++) {
+	
+	}
+}
+socket.on('restart-game', onGameRestart)
+
+
+
+
+
+
+
+
+//socket code 
 
     //Controle de movimentação do player ( R | L )
     socket.on("right", data => {
         paddle.rightArrow = true;
     });
+
+    
     socket.on("left", data => {
         paddle.leftArrow = true;
     });
-
 
     //Gerenciamento de entradas de novos players
 
     socket.on("new player", () => {
         socket.send("Novo player")
+        players.push(new Paddle(500,500))
+        
     })
-
-
-
 
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado esteja pressionada, mude o valor da variavel desejada para truwe.
 document.addEventListener("keydown", function(event){
@@ -79,13 +140,41 @@ document.addEventListener("keyup", function(event){
 });
 
 
+
+var paddles = []
+
+
+
 // Funcao para desejar o paddle, mais pra frente será colocado mais configs aqui dentro para melhorar o paddle
 function draw(){
+
+
+    
+
+    paddles.forEach(paddle => {
+
+        const paddleId = paddle.id
+
+        players[paddleId].x = paddle.x
+        players[paddleId].y = paddle.y
+        socket.emit('update-players-info', players[paddleId])
+
+
+        console.log('Alguma coisa');
+        paddle.drawPaddle(context);
+    });
+
+
     paddle.drawPaddle(context);
     ball.drawBall(context);
     bricks.forEach(brick =>{
         brick.drawBrick(context);
     })
+
+
+
+
+
 
     // Funcão para desenhar os corações dependendo de quantas vidas o jogador tem
     draw_player_life(player_life);
