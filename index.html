@@ -14,7 +14,22 @@
         <div id="restart">Play Again!</div>
     </div>
     <canvas id="breakout" width="960" height="540"></canvas>
-
     <script src="./index.js" type="module"></script>
+
+
+    <script src="/socket.io.js"></script>
+
+    <script>
+
+
+        const socket = io("ws://localhost:3000")
+
+
+        socket.on("connection", (socket) => {
+            console.log(socket.id);
+        });
+        
+    </script>
+
 </body>
 </html>
