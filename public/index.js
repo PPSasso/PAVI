@@ -32,8 +32,9 @@ var gameStarted = false
 
 
 var paddle = new Paddle(500,500);
+var remotePaddle = new Paddle(500,500);
 var ball = new Ball(paddle.x + 2, paddle.y - 50);
-var player_level = 1;
+var player_level = 2;
 var bricks = levelMaker(player_level);
 var player_life = 3;
 var player_points = 0;
@@ -53,6 +54,8 @@ var player_points = 0;
 socket.on("new_player_connected", ([players, hasGameStarted]) => {
     // socket.send("Novo player")
     // players.push(new Paddle(500,500))
+    // canvas.style.right = "98vh";
+
     if(hasGameStarted) {
         loop();
     }
@@ -86,13 +89,17 @@ async function loop(){
     
     // Move o paddle toda hora (sempre que uma tecla esteja ativa)
     paddle.updatePaddle(canvas);
+    remotePaddle.updatePaddle(canvas);
     
     ball.updateBall(canvas);
     
     // Coloca o background na tela (serve para limpar a tela e o local do paddle anterior)
     context.drawImage(BG, 0, 0);
-    
-    
+
+    socket.on("playerHasMoved", (infos) => {
+        if(infos[1] !== socket.id)
+            remotePaddle.x = infos[0];
+    })    
     
     // Caso a bola bata no chao, ela é resetada para a posição inicial
     if(ball.y + ball.radius > canvas.height){
@@ -171,6 +178,8 @@ async function loop(){
 // Funcao para desenhar o paddle, mais pra frente será colocado mais configs aqui dentro para melhorar o paddle
 function draw(){
     paddle.drawPaddle(context);
+    remotePaddle.drawPaddle(context);
+
     ball.drawBall(context);
     bricks.forEach(brick =>{
         brick.drawBrick(context);
@@ -182,7 +191,7 @@ function draw(){
     context.drawImage(POINTS, 55, 5, 25, 25);
     context.fillStyle = "#FFF";
     context.font = "25px Germania One";
-    context.fillText(PLAYERS.length, 200, 100)
+    context.fillText(player_points, 80, 25)
     
 }
 

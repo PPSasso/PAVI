@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
   socket.on('new-player', onNewPlayer)
 
   socket.on("paddleMoved", (positionX) => {
-    socket.emit("playerHasMoved", positionX)
+    io.emit("playerHasMoved", [positionX[0], positionX[1]])
   })
 
 
