@@ -19,8 +19,6 @@
 <body>
 
     <div id="zone_joystick"></div>
-
-
     <script type="text/javascript" src="./nipplejs.js"></script>
     <!-- Config nipplejs -->
     <script type="text/javascript">
@@ -54,16 +52,6 @@
                 }
                    
          })
-    </script>
-
-
-    <script src="/socket.io.js"></script>
-    <script>
-        const socket = io("ws://localhost:3000");
-
-        socket.on("connect", () => {
-            console.log("Welcome: " + socket.id);
-        });
     </script>
 
 </body>
