@@ -23,7 +23,7 @@ app.get('/controller',(req, res) => {
 
 
 
-var players = {};
+var players = []
 var hasGameStarted = false
 
 
@@ -33,25 +33,28 @@ const io = new Server(server, { /* options */})
 io.on('connection', (socket) => {
 
   console.log(`User connected with id ${socket.id}`)
-
-  function onNewPlayer(newPl) {
-    /**
-     * On New PLayer method -> responsible for updating players object and emitting to all sockets that a new player has connected
-     * @param {Object} newPl new player object containing initial player information
-    */
-
-    try {
-      console.log('New player connected:', newPl)
-
+  
+  if (!hasGameStarted) {
+    players.push({
+      id: socket.id
+    })
+    
+  }
+  if (players.length === 2) {
+    hasGameStarted = true
+  }
+  
+  io.emit('new_player_connected', [
+    players,
+    hasGameStarted
+  ])
+  
+  function onNewPlayer(newPlayer) {
+   try {
+      console.log('New player connected:', newPlayer)
+      
       // if no players connected reset hasGameStarted
-      if (Object.keys(players).length == 0) {
-        hasGameStarted = false
-      }
-
-      if (!hasGameStarted) {
-          players[socket.id] = newPl;
-          io.emit('update-players-object', players)
-      }
+      
 
     } 
     catch (err) {
@@ -60,6 +63,10 @@ io.on('connection', (socket) => {
   }
 
   socket.on('new-player', onNewPlayer)
+
+  socket.on("paddleMoved", (positionX) => {
+    socket.emit("playerHasMoved", positionX)
+  })
 
 
   function onCreatePaddle(paddle) {

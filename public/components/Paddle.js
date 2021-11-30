@@ -1,10 +1,8 @@
 //Algumas constantes (Acho legal criar um arquivo só de constantes também)
-
-
 //Altura, comprimento e distância da parte de baixo da tela, respectivamente.
 const PADDLE_HEIGHT = 10;
 const PADDLE_WIDTH = 70;
-
+import socket from "../index.js";
 
 //classe do paddle para organizar melhor.
 class Paddle {
@@ -30,11 +28,19 @@ class Paddle {
         this.leftArrow = false
 
         this.rightArrow = false
+        
+        this.hasEmitted = false
+
+        this.remotePaddleX = undefined
+
     }
 
     // Funcao para atualizar o paddle, verifica qual variavel esta com valor = true e move o paddle na posicao desejada
     updatePaddle(canvas){
-        
+        socket.emit("paddleMoved", this.x)
+            socket.on("playerHasMoved", (positionX) => {
+                this.remotePaddleX = positionX
+        })
         /* Esse if que está certo, ele delimita o limite que o paddle avança, porém não esta funcionando pois o width do context está como "undefined",
         acredito que por conta da config feita no global.css em que o width fica como "100%"
 
@@ -42,13 +48,11 @@ class Paddle {
             paddle.x += paddle.dx; 
         }*/ 
 
-
         // If sem limite de tela temporario, caso a variavel righArrow esteja como true (quando a seta de direita esta sendo pressionada), ele move o paddle pra direita
         if( this.rightArrow && ((this.x + this.width ) < canvas.width)){     
             this.x += this.dx;
             // socketClient.send(parseInt(this.x))
-                        
-            this.rightArrow = false
+            this.rightArrow = true
         }     
         /* Else if para caso a seta da esquerda esteja pressionada, neste caso, tem a condição do eixo x do paddle seja maior que 0, 
         para que não ultrapasse o limite esquerdo da tela.*/
@@ -56,8 +60,9 @@ class Paddle {
             this.x -= this.dx;
             // socketClient.send(parseInt(this.x))
             this.leftArrow = false
-        }
+            
 
+        }
 
     };
 
@@ -70,7 +75,6 @@ class Paddle {
         context.fillStyle='#fff';
         context.fillRect(this.x, this.y, this.width, this.height);
     };
-
 }
 
 export default Paddle
