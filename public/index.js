@@ -7,6 +7,10 @@ import Brick from './components/Brick.js';
 
 const socket = io()
 
+const body = document.getElementById("bodyDiv");
+
+const sAdjustment = document.getElementById("screenAdjustments");
+
 //Seleciona a tag "canvas" la do index.html
 const canvas = document.getElementById("breakout");
 
@@ -63,6 +67,7 @@ socket.on("new_player_connected", ([players, hasGameStarted]) => {
     })
 
     if(hasGameStarted) {
+        screenAdjustment();
         loop();
     }
     console.log("Novo jogador conectado", [players, hasGameStarted]);
@@ -269,6 +274,27 @@ function levelIsDone (bricks){
         }
     })  
     return bool;
+}
+
+function screenAdjustment(){
+
+    sAdjustment.style.display = "block";
+    
+    var ready = true;
+
+    while(ready){
+        document.addEventListener("keydown", function(event){
+            if (event.keyCode == 32) {
+                ready = false;
+                
+                sAdjustment.style.display = "none";
+
+            }
+            
+        });
+        
+    }
+
 }
 
 export default socket
