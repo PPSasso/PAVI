@@ -73,7 +73,7 @@ class Paddle {
 
     //Função responsável por renderizar o jogador
     drawPaddle(context){
-        context.fillStyle='#fff';
+        context.fillStyle='#00ffff';
         context.fillRect(this.x, this.y, this.width, this.height);
     };
 }

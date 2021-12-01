@@ -26,6 +26,8 @@ LIFE_IMAGE.src = "imagens/life.png";
 var POINTS = new Image();
 POINTS.src = "imagens/points.png";
 
+var brickColor;
+
 //Isso foi mais um teste, depois tem que criar uma pasta só de estilos e colocar isso la, só pra organizar.
 //var WAIT_PLAYER = new Image();
 //WAIT_PLAYER.addEventListener("load", function () {}, false);
@@ -47,11 +49,11 @@ let ballOwner = false
 var nippleId
 
 var paddle = new Paddle(500,500);
-var remotePaddle = new Paddle(700,500);
+var remotePaddle = new Paddle(500,500);
 var Players = [paddle, remotePaddle]
 
 var ball = new Ball(paddle.x + 2, paddle.y - 50);
-var player_level = 2;
+var player_level = 3;
 var bricks = levelMaker(player_level);
 var player_life = 3;
 var player_points = 0;
@@ -86,7 +88,7 @@ socket.on("new_player_connected", ([players, hasGameStarted]) => {
             ballOwner = true;
         }
         if(player.id === socket.id && !player.ballOwner){
-            body.style.right
+            body.style.right = "500px"
         }
     })
 
@@ -232,11 +234,11 @@ function draw() {
 
   // Funcão para desenhar os corações dependendo de quantas vidas o jogador tem
   draw_player_life(player_life);
-  context.drawImage(WAIT_PLAYER, 10, 10);
-  context.drawImage(POINTS, 55, 5, 25, 25);
   context.fillStyle = "#FFF";
   context.font = "25px Germania One";
   context.fillText(player_points, 80, 25);
+  context.drawImage(POINTS, 55, 5, 25, 25);
+  context.drawImage(WAIT_PLAYER, 10, 10);
 }
 
 //Isso aqui ta uma bagunça ainda, vou arrumar quando tiver saco kkk -Sasso
@@ -244,8 +246,19 @@ function levelMaker(level) {
   const bricks = [];
   // Y significa o Level, entao se o level for 1, tera apenas uma fileira e assim por diante. Cada fileira tera 23 blocos.
   for (let y = 0; y < level; y++) {
+    if(y === 0){
+        brickColor = "#FF1493";
+    }
+    else if(y === 1){
+        brickColor = "#FF0000";
+        
+    }
+    else{
+        
+        brickColor = "#FF8C00";
+    }
     for (let x = 0; x < 23; x++) {
-      let brick = new Brick(x * 37 + 60, 35 + y * 18);
+      let brick = new Brick(x * 37 + 60, 35 + y * 18, brickColor);
       bricks.push(brick);
     }
   }
@@ -299,27 +312,6 @@ function levelIsDone(bricks) {
     }
   });
   return bool;
-}
-
-function screenAdjustment(){
-
-    sAdjustment.style.display = "block";
-    
-    var ready = true;
-
-    while(ready){
-        document.addEventListener("keydown", function(event){
-            if (event.keyCode == 32) {
-                ready = false;
-                
-                sAdjustment.style.display = "none";
-
-            }
-            
-        });
-        
-    }
-
 }
 
 export default socket
