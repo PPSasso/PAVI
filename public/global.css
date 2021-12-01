@@ -11,7 +11,9 @@ body, html{
 
     width: 205vh;
     height: 100vh;
-
+    
+    width: 100%;
+    height: 100%;
 }
 
 #gameover{
@@ -48,6 +50,6 @@ body, html{
     color : #FFF;
     top: 56%;
     left: 47%;
-    
+
     display: none;
 }

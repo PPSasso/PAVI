@@ -67,7 +67,7 @@ socket.on("new_player_connected", ([players, hasGameStarted]) => {
     })
 
     if(hasGameStarted) {
-        screenAdjustment();
+        // screenAdjustment();
         loop();
     }
     console.log("Novo jogador conectado", [players, hasGameStarted]);
