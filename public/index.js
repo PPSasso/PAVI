@@ -77,6 +77,9 @@ socket.on("new_player_connected", ([players, hasGameStarted]) => {
         if(player.id === socket.id && player.ballOwner) {
             ballOwner = true;
         }
+        if(player.id === socket.id && !player.ballOwner){
+            body.style.right
+        }
     })
 
     players.map((player) => {
