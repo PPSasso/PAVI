@@ -35,9 +35,18 @@ io.on('connection', (socket) => {
   console.log(`User connected with id ${socket.id}`)
   
   if (!hasGameStarted) {
-    players.push({
-      id: socket.id
-    })
+    if(players.length === 0) {
+      players.push({
+        id: socket.id,
+        ballOwner: true
+      })
+    } else {
+      players.push({
+        id: socket.id,
+        ballOwner: false
+      })
+    }
+
     
   }
   if (players.length === 2) {
@@ -68,41 +77,18 @@ io.on('connection', (socket) => {
     io.emit("playerHasMoved", [positionX[0], positionX[1]])
   })
 
-
-  function onCreatePaddle(paddle) {
-    try {
-          console.log('Creating Paddle:', paddle)
-          io.emit('create-paddle', paddle)
-    } catch (err) {
-          console.error('Error on onCreatePaddle method:', err)
-    }
-  }
-
-  socket.on('create-paddle', onCreatePaddle)
-
-
-  function updatePlayerInfo(pl) {
-    try {
-        console.log("Updating player info:", pl)
-        const id = pl.id
-        if (players[id]) {
-            players[id] = pl;
-        }
-        io.emit('update-players-info', players)
-    } catch (err) {
-        console.log('Error on updatePlayerInfo method:', err)
-    }
-
-  }
-
-  
-  socket.on('update-players-info', updatePlayerInfo)
-
-
-
-
-  socket.on('message', (data) => {
-    io.emit(data)
+  socket.on("ball_moved", ([x, y, id]) => {
+    io.emit("ball_has_moved", [x, y, id])
   })
 
+  socket.on('disconnect', (reason) => {
+    hasGameStarted = false
+    console.log("Players before: ", players)
+    players = players.filter(({id}) => {
+      return id !== socket.id
+    })
+    console.log("User: ", socket.id, "With reason: ", reason)
+    console.log("Players after: ", players)
+  })
 })
+
