@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="global.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="global.css" />
 
     <title>Breakout</title>
 </head>
 <body id="bodyDiv">
     <div id="gameover">
-        <img src="imagens/GameOver.png" alt="" id="defeat">
-        <div id="restart">Play Again!</div>
+      <img src="imagens/GameOver.png" alt="" id="defeat" />
+      <div id="restart">Play Again!</div>
+    </div>
+    <div id="wait-players">
+      <img
+        src="imagens/aguardando-jogadores.png"
+        alt="wait-player"
+        class="defeat"
+      />
     </div>
     <div id="screenAdjustments">
         <h2>Calibrate each screen position and press 'space' when ready.</h2>
@@ -20,7 +27,10 @@
     <canvas id="breakout" width="960" height="540"></canvas>
     <script src="./index.js" type="module"></script>
     <!-- <script src="/socket.io.js"></script> -->
-    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js" integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj" crossorigin="anonymous"></script>
-
-</body>
+    <script
+      src="https://cdn.socket.io/4.4.0/socket.io.min.js"
+      integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
