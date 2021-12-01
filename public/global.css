@@ -3,14 +3,17 @@ body, html{
     padding: 0;
     height: 100%;
 
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     overflow-y: hidden;
 }
 
 #breakout{
+    position: relative;
+    
+    width: 205vh;
+    height: 100vh;
 
-    width: 100%;
-    height: 100%;
+    overflow-x: hidden;
 
 }
 
