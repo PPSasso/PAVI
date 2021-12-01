@@ -19,39 +19,53 @@
 <body>
 
     <div id="zone_joystick"></div>
-    <script type="text/javascript" src="./nipplejs.js"></script>
+
+    <script type="text/javascript" src="./components/nipplejs.js"></script>
+
+
     <!-- Config nipplejs -->
-    <script type="text/javascript">
-        var options = { 
-            color: "red",
-            restOpacity: 1,
-            zone: document.getElementById('zone_joystick'),
-            mode: 'static',
-            position: {left: '50%', top: '25%'},
-            lockX: true
-          };
+    <script type="text/javascript"> 
+
+    var options = { 
+        color: "red",
+        restOpacity: 1,
+        zone: document.getElementById('zone_joystick'),
+        mode: 'static',
+        position: {left: '50%', top: '25%'},
+        lockX: true
+      };
 
 
-     
-        var manager = nipplejs.create(options);
+ 
+    var manager = nipplejs.create(options);
 
-        manager.on('connection', function(evt, nipple) {
+    manager.on('connection', function(evt, nipple) {
+        
+        socket.send('incrementa')
+    })
+
+    manager.on('move', function(evt, nipple) {
+        if(nipple.direction) 
+            var controllerDir = nipple.direction.angle 
             
-            socket.send('incrementa')
-        })
+            if(controllerDir) 
+            {   
+                console.log("id" + manager.id)
+                socket.emit('Nipple',[controllerDir,socket.id])
 
-        manager.on('move', function(evt, nipple) {
-            if(nipple.direction) 
-                var controllerDir = nipple.direction.angle 
-                
-                if(controllerDir) 
-                {   
-                    console.log("id" + manager.id)
-                    socket.send(controllerDir)
+            }
+               
+     })
+    </script>
 
-                }
-                   
-         })
+
+    <script src="/socket.io.js"></script>
+    <script>
+        const socket = io("ws://localhost:3000");
+
+        socket.on("connect", () => {
+            console.log("Welcome: " + socket.id);
+        });
     </script>
 
 </body>

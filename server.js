@@ -35,23 +35,35 @@ io.on('connection', (socket) => {
   console.log(`User connected with id ${socket.id}`)
   
   if (!hasGameStarted) {
-    if(players.length === 0) {
+    
+    if (players.length === 1) {
       players.push({
         id: socket.id,
+        nippleId: players[0].id,
         ballOwner: true
       })
-    } else {
+    }
+  
+    else if (players.length === 3) {
+      hasGameStarted = true
       players.push({
         id: socket.id,
+        nippleId: players[2].id,
         ballOwner: false
       })
-    }
+    } 
+    else {
+      players.push({
+        id: socket.id,
+        nippleId: ""
+      })
+      
+    } 
 
-    
   }
-  if (players.length === 2) {
-    hasGameStarted = true
-  }
+  
+
+
   
   io.emit('new_player_connected', [
     players,
@@ -90,5 +102,49 @@ io.on('connection', (socket) => {
     console.log("User: ", socket.id, "With reason: ", reason)
     console.log("Players after: ", players)
   })
-})
+  
 
+  function onCreatePaddle(paddle) {
+    try {
+          console.log('Creating Paddle:', paddle)
+          io.emit('create-paddle', paddle)
+    } catch (err) {
+          console.error('Error on onCreatePaddle method:', err)
+    }
+  }
+
+  socket.on('create-paddle', onCreatePaddle)
+
+
+  function updatePlayerInfo(pl) {
+    try {
+        console.log("Updating player info:", pl)
+        const id = pl.id
+        if (players[id]) {
+            players[id] = pl;
+        }
+        io.emit('update-players-info', players)
+    } catch (err) {
+        console.log('Error on updatePlayerInfo method:', err)
+    }
+
+  }
+
+  
+  socket.on('update-players-info', updatePlayerInfo)
+
+
+
+
+  socket.on('message', (data) => {
+
+    console.log(Object.values(data))
+
+    io.emit(data)
+  })
+
+  socket.on('Nipple', (data) => {
+    io.emit(data[0], data[1])
+  })
+
+})
