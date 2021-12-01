@@ -6,6 +6,10 @@ import Brick from "./components/Brick.js";
 
 const socket = io();
 
+const body = document.getElementById("bodyDiv");
+
+const sAdjustment = document.getElementById("screenAdjustments");
+
 //Seleciona a tag "canvas" la do index.html
 const canvas = document.getElementById("breakout");
 
@@ -40,6 +44,7 @@ canvas.style.backgroundColor = "#222222"
 
 var gameStarted = false
 let ballOwner = false
+var nippleId
 
 var paddle = new Paddle(500,500);
 var remotePaddle = new Paddle(700,500);
@@ -52,13 +57,26 @@ var player_life = 3;
 var player_points = 0;
 
 //Controle de movimentação do player ( R | L )
-// socket.on("right", data => {
-//     paddle.rightArrow = true;
-// });
+socket.on("right", data => {
 
-// socket.on("left", data => {
-//     paddle.leftArrow = true;
-// });
+    console.log("ID DE DATA: " + data)
+    socket.emit(data)
+
+
+    if(data === nippleId ) {  
+
+        paddle.rightArrow = true;
+    }
+});
+
+
+
+socket.on("left", data => {
+    if(data === nippleId ) {  
+        paddle.leftArrow = true;
+    }
+    
+});
 
 //Gerenciamento de entradas de novos players
 
@@ -66,6 +84,15 @@ socket.on("new_player_connected", ([players, hasGameStarted]) => {
     players.map((player) => {
         if(player.id === socket.id && player.ballOwner) {
             ballOwner = true;
+        }
+        if(player.id === socket.id && !player.ballOwner){
+            body.style.right
+        }
+    })
+
+    players.map((player) => {
+        if(player.id === socket.id) {
+            nippleId = player.nippleId
         }
     })
 
@@ -274,4 +301,25 @@ function levelIsDone(bricks) {
   return bool;
 }
 
-export default socket;
+function screenAdjustment(){
+
+    sAdjustment.style.display = "block";
+    
+    var ready = true;
+
+    while(ready){
+        document.addEventListener("keydown", function(event){
+            if (event.keyCode == 32) {
+                ready = false;
+                
+                sAdjustment.style.display = "none";
+
+            }
+            
+        });
+        
+    }
+
+}
+
+export default socket

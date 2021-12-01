@@ -51,7 +51,7 @@ class Paddle {
         if( this.rightArrow && ((this.x + this.width ) < canvas.width)){     
             this.x += this.dx;
             // socketClient.send(parseInt(this.x))
-            this.rightArrow = true
+            this.rightArrow = false
 
             socket.emit("paddleMoved", [this.x, socket.id])
         }     
@@ -60,7 +60,7 @@ class Paddle {
         else if(this.leftArrow &&  this.x > 0){
             this.x -= this.dx;
             // socketClient.send(parseInt(this.x))
-            this.leftArrow = true
+            this.leftArrow = false
             
             socket.emit("paddleMoved", [this.x, socket.id])
         }

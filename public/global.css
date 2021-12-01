@@ -25,13 +25,14 @@ html {
   margin-top: 250px;
 }
 
-#gameover {
-  position: absolute;
-  width: 205vh;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: none;
+#gameover{
+    position: absolute;
+    width: 210vh;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: none;
 }
+
 #defeat {
   left: 300px;
   width: 50%;
@@ -49,4 +50,16 @@ html {
   color: #fff;
   top: 56%;
   left: 47%;
+}
+
+#screenAdjustments{
+    position: absolute;
+    top: 80vh;
+    left : 80vh;
+    font-size: 1.25em;
+    color : #FFF;
+    top: 56%;
+    left: 47%;
+
+    display: none;
 }

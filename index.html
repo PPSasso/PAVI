@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="global.css" />
 
     <title>Breakout</title>
-  </head>
-  <body>
+</head>
+<body id="bodyDiv">
     <div id="gameover">
       <img src="imagens/GameOver.png" alt="" id="defeat" />
       <div id="restart">Play Again!</div>
@@ -19,6 +19,10 @@
         alt="wait-player"
         class="defeat"
       />
+    </div>
+    <div id="screenAdjustments">
+        <h2>Calibrate each screen position and press 'space' when ready.</h2>
+        
     </div>
     <canvas id="breakout" width="960" height="540"></canvas>
     <script src="./index.js" type="module"></script>
