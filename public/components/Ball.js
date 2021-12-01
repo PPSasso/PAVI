@@ -1,4 +1,6 @@
 //classe da bola para organizar melhor.
+
+import socket from "../index.js";
 class Ball {
 
     //Construtor do paddle que recebe apenas a posição inicial como parametro.
@@ -20,26 +22,32 @@ class Ball {
     }
 
     // Funcao para atualizar o paddle, verifica qual variavel esta com valor = true e move o paddle na posicao desejada
-    async updateBall(canvas, socketClient){
+    async updateBall(canvas, ballOwner){
         this.x += this.dx;
         this.y += this.dy;
-
-        if((this.x + this.radius) > canvas.width){
-            this.dx = -this.dx;           
-        }
-        else if(this.x < 0){
-            this.dx = -this.dx;           
-        }
-
-        if((this.y + this.radius) > canvas.height){
-            this.dy = -this.dy;           
-        }
-        else if(this.y < 0){
-            this.dy = -this.dy;           
-        }      
         
-
-
+        if((this.x + this.radius) >= canvas.width){
+            this.dx = -this.dx;    
+            // socket.emit("ball_moved", [this.x, this.y, socket.id])     
+            
+        }
+        else if(this.x <= 0){
+            this.dx = -this.dx;
+            // socket.emit("ball_moved", [this.x, this.y, socket.id])     
+        }
+        
+        if((this.y + this.radius) >= canvas.height){
+            this.dy = -this.dy;           
+            // socket.emit("ball_moved", [this.x, this.y, socket.id])     
+            
+        }
+        else if(this.y <= 0){
+            this.dy = -this.dy;   
+            // socket.emit("ball_moved", [this.x, this.y, socket.id])     
+            
+        }  
+        if(ballOwner)
+            socket.emit("ball_moved", [this.x, this.y, socket.id])        
     };
 
 
@@ -49,7 +57,6 @@ class Ball {
     }
 
 
-    //Essa parte é bem complexa, to com preguiça de escrever tudo, me pergunta que eu explico em voz kkk. Assinado: Sasso
     collides(target){
         if(this.x > target.x + target.width || target.x > this.x + this.radius){
             return false;

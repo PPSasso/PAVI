@@ -36,6 +36,15 @@ var gameStarted = false;
 
 var paddle = new Paddle(500, 500);
 var remotePaddle = new Paddle(500, 500);
+canvas.style.backgroundColor = "#222222"
+
+var gameStarted = false
+let ballOwner = false
+
+var paddle = new Paddle(500,500);
+var remotePaddle = new Paddle(700,500);
+var Players = [paddle, remotePaddle]
+
 var ball = new Ball(paddle.x + 2, paddle.y - 50);
 var player_level = 2;
 var bricks = levelMaker(player_level);
@@ -54,16 +63,19 @@ var player_points = 0;
 //Gerenciamento de entradas de novos players
 
 socket.on("new_player_connected", ([players, hasGameStarted]) => {
-  // socket.send("Novo player")
-  // players.push(new Paddle(500,500))
-  // canvas.style.right = "98vh";
+    players.map((player) => {
+        if(player.id === socket.id && player.ballOwner) {
+            ballOwner = true;
+        }
+    })
 
-  if (hasGameStarted) {
-    WAIT_PLAYER.style.display = "none";
-    loop();
-  }
-  console.log("Novo jogador conectado", [players, hasGameStarted]);
-});
+    if(hasGameStarted) {
+      WAIT_PLAYER.style.display = "none";
+      loop();
+
+    }
+    console.log("Novo jogador conectado", [players, hasGameStarted]);
+})
 
 // Funcao que permite que cada vez que a seta da esquerda ou direita do teclado esteja pressionada, mude o valor da variavel desejada para truwe.
 document.addEventListener("keydown", function (event) {
@@ -87,71 +99,82 @@ document.addEventListener("keyup", function (event) {
 });
 
 // Função principal do programa. Fica um loop eterno para que as alterações sejam feitas em tempo real
-async function loop() {
+async function loop(){
+
+  socket.on("ball_has_moved", ([x, y, id]) => {
+      if(!ballOwner) {
+          ball.y = y
+          ball.x = x
+      }
+  })
+  
   // Move o paddle toda hora (sempre que uma tecla esteja ativa)
   paddle.updatePaddle(canvas);
   remotePaddle.updatePaddle(canvas);
-
-  ball.updateBall(canvas);
-
+  ball.updateBall(canvas, ballOwner);
+  
   // Coloca o background na tela (serve para limpar a tela e o local do paddle anterior)
   context.drawImage(BG, 0, 0);
 
   socket.on("playerHasMoved", (infos) => {
-    if (infos[1] !== socket.id) remotePaddle.x = infos[0];
-  });
-
+      if(infos[1] !== socket.id)
+          remotePaddle.x = infos[0];
+  })    
+  
   // Caso a bola bata no chao, ela é resetada para a posição inicial
-  if (ball.y + ball.radius > canvas.height) {
-    ball.resetBall(canvas, paddle.y);
-    player_life--;
+  if(ball.y + ball.radius > canvas.height){
+      ball.resetBall(canvas, paddle.y);
+      player_life --;
 
-    // Verifica se o player não tem mais vida
-    if (player_life == 0) {
-      showDefeat();
-    }
-  }
-
-  if (ball.collides(paddle) && ball.dy > 0) {
-    ball.y = paddle.y - 1;
-    ball.dy = -ball.dy;
-
-    //Se bater do lado esquerdo do paddle e a bola estiver indo pra direita, ela vai pra esquerda
-    if (paddle.x + paddle.width / 2 > ball.x + ball.radius && ball.dx > 0) {
-      ball.dx = -ball.dx;
-    }
-
-    //Se bater do lado direito do paddle e a bola estiver indo pra esquerda, ela vai pra direita
-    if (paddle.x + paddle.width / 2 < ball.x + ball.radius && ball.dx < 0) {
-      ball.dx = -ball.dx;
-    }
-  }
-
-  bricks.forEach((brick) => {
-    if (ball.collides(brick) && brick.render) {
-      if (ball.x + 2 < brick.x && ball.dx > 0) {
-        ball.dx = -ball.dx;
-        brick.render = false;
-      } else if (ball.x + 6 > brick.x + brick.width && ball.dx < 0) {
-        ball.dx = -ball.dx;
-        brick.render = false;
-      } else if (ball.y < brick.y) {
-        ball.dy = -ball.dy;
-        brick.render = false;
-      } else {
-        ball.dy = -ball.dy;
-        brick.render = false;
+      // Verifica se o player não tem mais vida
+      if(player_life == 0){
+          showDefeat();
       }
-      player_points += 10;
+  }
+  Players.map((paddle) => {
+    if(ball.collides(paddle) && ball.dy >= 0 && ballOwner){
+        ball.y = paddle.y - 1;
+        ball.dy = -ball.dy;
+        
+        //Se bater do lado esquerdo do paddle e a bola estiver indo pra direita, ela vai pra esquerda
+        if(paddle.x+(paddle.width/2) > ball.x+ball.radius && ball.dx > 0){
+            ball.dx = -ball.dx;
+        }
+
+        //Se bater do lado direito do paddle e a bola estiver indo pra esquerda, ela vai pra direita
+        if(paddle.x+(paddle.width/2) < ball.x+ball.radius && ball.dx < 0){
+            ball.dx = -ball.dx;
+        }
     }
-  });
+  })
+
+  
+  bricks.forEach(brick =>{
+      if(ball.collides(brick) && brick.render){
+          if(ball.x + 2 < brick.x && ball.dx > 0 && ballOwner){
+              ball.dx = -ball.dx;
+          }
+          else if(ball.x + 6 > brick.x + brick.width && ball.dx < 0 && ballOwner){
+              ball.dx = -ball.dx;
+          }
+          else if(ball.y < brick.y && ballOwner){
+              ball.dy = -ball.dy
+          }
+          else{
+              if(ballOwner) 
+                  ball.dy = -ball.dy
+          }
+          brick.render=false;
+          player_points += 10;
+      }
+  })
 
   // Desenha o paddle no local atualizado
   /* 
-       Verifica se o level já acabou, caso já tenha acabado, aumenta o level (aumenta uma fileira)
-       Aqui tem que colocar mais propriedades de acordo com a ideia do nosso jogo, no caso só coloquei que aumenta uma vida caso o jogador não esteja com vida cheia 
-       e coloquei para ele ganhar 1000 pontos, mas tem que colocar esquema para aumentar velocidade da bola, etc
-    */
+     Verifica se o level já acabou, caso já tenha acabado, aumenta o level (aumenta uma fileira)
+     Aqui tem que colocar mais propriedades de acordo com a ideia do nosso jogo, no caso só coloquei que aumenta uma vida caso o jogador não esteja com vida cheia 
+     e coloquei para ele ganhar 1000 pontos, mas tem que colocar esquema para aumentar velocidade da bola, etc
+  */
   if (levelIsDone(bricks)) {
     player_level++;
     console.log(player_level);
@@ -165,7 +188,10 @@ async function loop() {
     requestAnimationFrame(loop);
   }
   draw();
-}
+
+  }
+
+    
 
 // Funcao para desenhar o paddle, mais pra frente será colocado mais configs aqui dentro para melhorar o paddle
 function draw() {
