@@ -35,14 +35,34 @@ io.on('connection', (socket) => {
   console.log(`User connected with id ${socket.id}`)
   
   if (!hasGameStarted) {
-    players.push({
-      id: socket.id
-    })
-    
+
+
+    if (players.length === 1) {
+      players.push({
+        id: socket.id,
+        nippleId: players[0].id
+      })
+    }
+  
+    else if (players.length === 3) {
+      hasGameStarted = true
+      players.push({
+        id: socket.id,
+        nippleId: players[2].id
+      })
+    } 
+    else {
+      players.push({
+        id: socket.id,
+        nippleId: ""
+      })
+      
+    }
+
   }
-  if (players.length === 2) {
-    hasGameStarted = true
-  }
+  
+
+
   
   io.emit('new_player_connected', [
     players,
@@ -102,7 +122,14 @@ io.on('connection', (socket) => {
 
 
   socket.on('message', (data) => {
+
+    console.log(Object.values(data))
+
     io.emit(data)
+  })
+
+  socket.on('Nipple', (data) => {
+    io.emit(data[0], data[1])
   })
 
 })

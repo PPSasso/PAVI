@@ -29,7 +29,7 @@ canvas.style.backgroundColor = "#222222"
 
 var Players = []
 var gameStarted = false
-
+var nippleId
 
 var paddle = new Paddle(500,500);
 var remotePaddle = new Paddle(500,500);
@@ -40,14 +40,26 @@ var player_life = 3;
 var player_points = 0;
 
 //Controle de movimentação do player ( R | L )
-// socket.on("right", data => {
-//     paddle.rightArrow = true;
-// });
+socket.on("right", data => {
+
+    console.log("ID DE DATA: " + data)
+    socket.emit(data)
 
 
-// socket.on("left", data => {
-//     paddle.leftArrow = true;
-// });
+    if(data === nippleId ) {  
+
+        paddle.rightArrow = true;
+    }
+});
+
+
+
+socket.on("left", data => {
+    if(data === nippleId ) {  
+        paddle.leftArrow = true;
+    }
+    
+});
 
 //Gerenciamento de entradas de novos players
 
@@ -55,6 +67,12 @@ socket.on("new_player_connected", ([players, hasGameStarted]) => {
     // socket.send("Novo player")
     // players.push(new Paddle(500,500))
     // canvas.style.right = "98vh";
+
+    players.map((player) => {
+        if(player.id === socket.id) {
+            nippleId = player.nippleId
+        }
+    })
 
     if(hasGameStarted) {
         loop();
@@ -260,5 +278,20 @@ function levelIsDone (bricks){
     })  
     return bool;
 }
+
+
+
+
+var options = { 
+    color: "red",
+    restOpacity: 1,
+    zone: document.getElementById('zone_joystick'),
+    mode: 'static',
+    position: {left: '50%', top: '25%'},
+    lockX: true
+};
+
+
+
 
 export default socket
