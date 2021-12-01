@@ -1,44 +1,52 @@
-body, html{
-    margin: 0;
-    padding: 0;
-    height: 100%;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 
-    overflow-x: hidden;
-    overflow-y: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
-#breakout{
-    /* position: fixed; */
+#breakout {
+  /* position: fixed; */
 
-    width: 100%;
-    height: 100%;
-    /* width: 205vh;
+  width: 100%;
+  height: 100%;
+  /* width: 205vh;
     height: 100vh; */
-
 }
 
-#gameover{
-    position: absolute;
-    width: 205vh;
-    height: 100vh;
-    background: rgba(0,0,0,0.5);
-    display: none;
-}
-#defeat{
-    left : 300px;
-    width: 50%;
-    height: 50%;
-    position: absolute;
-    display: none;
+#wait-players {
+  position: absolute;
+  width: 150vh;
+  height: auto;
+  display: none;
+  margin-top: 250px;
 }
 
-#restart{
-    position: absolute;
-    top: 80vh;
-    left : 80vh;
-    cursor: pointer;
-    font-size: 1.25em;
-    color : #FFF;
-    top: 56%;
-    left: 47%;
+#gameover {
+  position: absolute;
+  width: 205vh;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+#defeat {
+  left: 300px;
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  display: none;
+}
+
+#restart {
+  position: absolute;
+  top: 80vh;
+  left: 80vh;
+  cursor: pointer;
+  font-size: 1.25em;
+  color: #fff;
+  top: 56%;
+  left: 47%;
 }
