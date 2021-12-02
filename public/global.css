@@ -4,22 +4,26 @@ html {
   padding: 0;
   height: 100%;
 
-  overflow-x: hidden;
+  width: 200vw;
+
+  position: static;
+  
+  /* overflow-x: hidden; */
   overflow-y: hidden;
 }
 
 #breakout {
-  /* position: fixed; */
+  position: relative;
 
-  width: 100%;
+  width: 200vw;
   height: 100%;
-  /* width: 205vh;
-    height: 100vh; */
+  overflow-x: hidden;
+
 }
 
 #wait-players {
   position: absolute;
-  width: 150vh;
+  width: 150vw;
   height: auto;
   display: none;
   margin-top: 250px;
@@ -27,7 +31,7 @@ html {
 
 #gameover{
     position: absolute;
-    width: 210vh;
+    width: 100vw;
     height: 100vh;
     background: rgba(0,0,0,0.5);
     display: none;
@@ -52,7 +56,7 @@ html {
   left: 47%;
 }
 
-#screenAdjustments{
+/* #screenAdjustments{
     position: absolute;
     top: 80vh;
     left : 80vh;
@@ -62,4 +66,4 @@ html {
     left: 47%;
 
     display: none;
-}
+} */

@@ -2,7 +2,7 @@ const BRICK_HEIGHT = 15;
 const BRICK_WIDTH = 35;
 
 class Brick {
-    constructor(x,y){ 
+    constructor(x,y, color){ 
         //Posição eixo x
         this.x = x;
         
@@ -15,13 +15,15 @@ class Brick {
         //Comprimento
         this.width = BRICK_WIDTH;
 
+        this.color = color;
+
         //Se ja acertaram ele ou não
         this.render = true;
     }
 
     drawBrick(context){
 
-        context.fillStyle='#fff';
+        context.fillStyle=this.color;
         
         if(this.render){
             context.fillRect(this.x, this.y, BRICK_WIDTH, BRICK_HEIGHT);

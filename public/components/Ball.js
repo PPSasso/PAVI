@@ -23,25 +23,28 @@ class Ball {
 
     // Funcao para atualizar o paddle, verifica qual variavel esta com valor = true e move o paddle na posicao desejada
     async updateBall(canvas, ballOwner){
-        this.x += this.dx;
-        this.y += this.dy;
+        if(ballOwner){
+            this.x += this.dx;
+            this.y += this.dy;
+
+        }
         
-        if((this.x + this.radius) >= canvas.width){
+        if((this.x + this.radius) >= canvas.width && ballOwner){
             this.dx = -this.dx;    
             // socket.emit("ball_moved", [this.x, this.y, socket.id])     
             
         }
-        else if(this.x <= 0){
+        else if(this.x <= 0 && ballOwner){
             this.dx = -this.dx;
             // socket.emit("ball_moved", [this.x, this.y, socket.id])     
         }
         
-        if((this.y + this.radius) >= canvas.height){
+        if((this.y + this.radius) >= canvas.height && ballOwner){
             this.dy = -this.dy;           
             // socket.emit("ball_moved", [this.x, this.y, socket.id])     
             
         }
-        else if(this.y <= 0){
+        else if(this.y <= 0 && ballOwner){
             this.dy = -this.dy;   
             // socket.emit("ball_moved", [this.x, this.y, socket.id])     
             
